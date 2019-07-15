@@ -50,18 +50,20 @@ public class ManualTestsBentley {
    public static void testFindName() {
       PascalCoinClient client = getClientLocal();
       //search must be 3 characters at least for the 
-      String name = "tley";
+      String name = "bent";
       Boolean exact = false;
       Integer type = null;
       Integer start = 0;
       Integer max = 10;
+      System.out.println("List<Account> findAccounts(String name, Integer type, Integer start, Integer max);");
       List<Account> list = client.findAccounts(name, type, start, max);
       for (Iterator iterator = list.iterator(); iterator.hasNext();) {
          Account ac0 = (Account) iterator.next();
          System.out.println(ac0.getAccount() + " : " + ac0.getName());
       }
 
-      list = client.findAccounts(name, exact, type, null, null, null, 500, max);
+      System.out.println("List<Account> findAccounts(String name, Boolean exact, Integer type, Boolean listed, Double minBalance, Double maxBalance, Integer start, Integer max);");
+      list = client.findAccounts(name, exact, type, null, null, null, 0, 10000);
       for (Iterator iterator = list.iterator(); iterator.hasNext();) {
          Account ac0 = (Account) iterator.next();
          System.out.println(ac0.getAccount() + " : " + ac0.getName());
