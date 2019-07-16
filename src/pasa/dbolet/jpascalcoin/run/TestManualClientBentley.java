@@ -23,7 +23,7 @@ import com.github.davidbolet.jpascalcoin.api.model.PublicKey;
  * @author Charles Bentley
  *
  */
-public class ManualTestsBentley {
+public class TestManualClientBentley {
 
    public static PascalCoinClient getClient() {
       PascalCoinClient client = new PascalCoinClientImpl("192.168.0.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
