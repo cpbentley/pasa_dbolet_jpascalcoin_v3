@@ -23,46 +23,37 @@ import com.github.davidbolet.jpascalcoin.api.model.PublicKey;
  * @author Charles Bentley
  *
  */
-public class TestManualClientBentley {
-
-   public static PascalCoinClient getClient() {
-      PascalCoinClient client = new PascalCoinClientImpl("192.168.0.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
-
-      return client;
-   }
-
-   public static PascalCoinClient getClientLocal() {
-      PascalCoinClient client = new PascalCoinClientImpl("127.0.0.1", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
-
-      return client;
-   }
+public class TestManualClientAccounts extends TestManualClientAbstract {
 
    public static void main(String[] args) {
-      //testDonate();
-      //testGet();
-      //testGetWalletAccounts_0_100();
+      TestManualClientAccounts c = new TestManualClientAccounts();
+      //c.testDonate();
+      //c.testGet();
+      //c.testGetWalletAccounts_0_100();
 
-      //      testGetWalletPubKey();
-      //      testGetAccount();
-      //testGetAllAccounts();
+      //      c.testGetWalletPubKey();
+      //      c.testGetAccount();
+      //c.testGetAllAccounts();
 
-      //testFindAccount();
-      //testRichList();
+      //c.testFindAccount();
+      //c.testRichList();
 
-      //testAccountForSale();
+      //c.testAccountForSale();
 
-      //testBuyAccount();
-      //testLast100Blocks();
+      //c.testBuyAccount();
+      //c.testLast100Blocks();
       
-      testFindName();
+      c.testFindName();
       
-      //testGetAccount(101181);
-      //testGetWalletAccountOwned();
+      c.testFindNameEmpty();
+      
+      //c.testGetAccount(101181);
+      //c.testGetWalletAccountOwned();
 
-      //testGetWalletAccount5(); //fails... public key not in wallet
+      //c.testGetWalletAccount5(); //fails... public key not in wallet
    }
 
-   public static void testAccountForSale() {
+   public  void testAccountForSale() {
       PascalCoinClient client = getClientLocal();
       String name = null;
       Integer type = null;
@@ -82,7 +73,7 @@ public class TestManualClientBentley {
       System.out.println("Done in " + (diff / 1000) + " seconds");
    }
 
-   public static void testBuyAccount() {
+   public  void testBuyAccount() {
       PascalCoinClient client = getClientLocal();
 
       List<PublicKey> list = client.getWalletPubKeys(0, 50);
@@ -112,7 +103,7 @@ public class TestManualClientBentley {
 
    }
 
-   public static void testDonate() {
+   public  void testDonate() {
       PascalCoinClient client = new PascalCoinClientImpl("192.168.1.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
       client.unlock("angband9");
 
@@ -130,7 +121,7 @@ public class TestManualClientBentley {
       System.out.println("Sent to " + accountOp + " balanceOP=" + balanceOp + " amountOp=" + amountOp);
    }
 
-   public static void testFindAccount() {
+   public  void testFindAccount() {
       PascalCoinClient client = getClientLocal();
       String name = null;
       Integer type = null;
@@ -167,7 +158,7 @@ public class TestManualClientBentley {
 
    }
 
-   public static void testFindName() {
+   public  void testFindName() {
       PascalCoinClient client = getClientLocal();
       //search must be 3 characters at least for the 
       String name = "pasc";
@@ -189,8 +180,31 @@ public class TestManualClientBentley {
          System.out.println(ac0.getAccount() + " : " + ac0.getName());
       }
    }
+   
+   public  void testFindNameEmpty() {
+      PascalCoinClient client = getClientLocal();
+      //search must be 3 characters at least for the 
+      String name = "";
+      Boolean exact = true;
+      Integer type = null;
+      Integer start = 0;
+      Integer max = 10;
+      System.out.println("List<Account> findAccounts(String name, Integer type, Integer start, Integer max);");
+      List<Account> list = client.findAccounts(name, type, start, max);
+      for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+         Account ac0 = (Account) iterator.next();
+         System.out.println(ac0.getAccount() + " : " + ac0.getName());
+      }
 
-   public static void testGet() {
+      System.out.println("List<Account> findAccounts(String name, Boolean exact, Integer type, Boolean listed, Double minBalance, Double maxBalance, Integer start, Integer max);");
+      list = client.findAccounts(name, exact, type, null, null, null, 0, 50);
+      for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+         Account ac0 = (Account) iterator.next();
+         System.out.println(ac0.getAccount() + " : " + ac0.getName());
+      }
+   }
+
+   public  void testGet() {
       //uses the default 
       PascalCoinClient client = new PascalCoinClientImpl("192.168.0.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
       client.unlock("angband9");
@@ -199,7 +213,7 @@ public class TestManualClientBentley {
       System.out.println("Account's balance: PASC=" + account.getBalance());
    }
 
-   public static void testGetAccount() {
+   public  void testGetAccount() {
       PascalCoinClient client = getClient();
       Account ac0 = client.getAccount(0);
       System.out.println(ac0.getAccount() + " : " + ac0.getBalance());
@@ -209,7 +223,7 @@ public class TestManualClientBentley {
 
    }
 
-   public static void testGetAccount(int account) {
+   public  void testGetAccount(int account) {
       PascalCoinClient client = getClientLocal();
       Account ac0 = client.getAccount(account);
       System.out.println(ac0.getAccount() + " : " + ac0.getBalance());
@@ -220,7 +234,7 @@ public class TestManualClientBentley {
 
    }
 
-   public static void testGetAllAccounts() {
+   public  void testGetAllAccounts() {
       PascalCoinClient client = getClientLocal();
 
       long time = System.currentTimeMillis();
@@ -268,7 +282,7 @@ public class TestManualClientBentley {
       }
    }
 
-   public static void testGetWalletAccount5() {
+   public  void testGetWalletAccount5() {
       PascalCoinClient client = getClientLocal();
       String encPubKey = null; //optional
       String b58PubKey = "JJj2GZDmBCwbQuFLumucGMqWALmqpNxuYDEpPYi6aq4y4gvdFv1JLJYGgQyt5oUa1sgyUoAK8m7adARBa9JfGuKRtJQsiegEWQ41WcsyQAZ9iUcnFRVgKe89mqmbuU8hPF7ewisP49HdJCpfHxiwiz95JGWoBP3XdSf4TvBQShjFeVuMEB6pXCMQCfcnG1uBi"; //optional
@@ -286,7 +300,7 @@ public class TestManualClientBentley {
       }
    }
 
-   public static void testGetWalletAccountOwned() {
+   public  void testGetWalletAccountOwned() {
       PascalCoinClient client = getClientLocal();
 
       client.getPendings();
@@ -308,7 +322,7 @@ public class TestManualClientBentley {
       }
    }
 
-   public static void testGetWalletAccounts_0_100() {
+   public  void testGetWalletAccounts_0_100() {
       PascalCoinClient client = getClient();
       String encPubKey = null; //optional
       String b58PubKey = null; //optional
@@ -329,7 +343,7 @@ public class TestManualClientBentley {
       }
    }
 
-   public static void testGetWalletPubKey() {
+   public  void testGetWalletPubKey() {
 
       PascalCoinClient client = getClient();
       Integer start = 0;
@@ -351,7 +365,7 @@ public class TestManualClientBentley {
 
    }
 
-   public static void testLast100Blocks() {
+   public  void testLast100Blocks() {
 
       PascalCoinClient client = getClientLocal();
 
@@ -362,7 +376,7 @@ public class TestManualClientBentley {
       }
    }
 
-   public static void testRichList() {
+   public  void testRichList() {
       PascalCoinClient client = getClientLocal();
 
       String name = null;
