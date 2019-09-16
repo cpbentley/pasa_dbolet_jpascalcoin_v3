@@ -27,6 +27,13 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    public static void main(String[] args) {
       TestManualClientAccounts c = new TestManualClientAccounts();
+
+      //by default is mainnet. set to true to test testnet
+      boolean isTestNet = false;
+      if (isTestNet) {
+         c.setPort(PascalCoinConstants.DEFAULT_TEST_RPC_PORT);
+      }
+
       //c.testDonate();
       //c.testGet();
       //c.testGetWalletAccounts_0_100();
@@ -42,18 +49,17 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
       //c.testBuyAccount();
       //c.testLast100Blocks();
-      
+
       c.testFindName();
-      
       c.testFindNameEmpty();
-      
+
       //c.testGetAccount(101181);
       //c.testGetWalletAccountOwned();
 
       //c.testGetWalletAccount5(); //fails... public key not in wallet
    }
 
-   public  void testAccountForSale() {
+   public void testAccountForSale() {
       PascalCoinClient client = getClientLocal();
       String name = null;
       Integer type = null;
@@ -73,7 +79,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       System.out.println("Done in " + (diff / 1000) + " seconds");
    }
 
-   public  void testBuyAccount() {
+   public void testBuyAccount() {
       PascalCoinClient client = getClientLocal();
 
       List<PublicKey> list = client.getWalletPubKeys(0, 50);
@@ -103,7 +109,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    }
 
-   public  void testDonate() {
+   public void testDonate() {
       PascalCoinClient client = new PascalCoinClientImpl("192.168.1.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
       client.unlock("angband9");
 
@@ -121,7 +127,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       System.out.println("Sent to " + accountOp + " balanceOP=" + balanceOp + " amountOp=" + amountOp);
    }
 
-   public  void testFindAccount() {
+   public void testFindAccount() {
       PascalCoinClient client = getClientLocal();
       String name = null;
       Integer type = null;
@@ -158,10 +164,10 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    }
 
-   public  void testFindName() {
+   public void testFindNameA() {
       PascalCoinClient client = getClientLocal();
       //search must be 3 characters at least for the 
-      String name = "pasc";
+      String name = "a";
       Boolean exact = false;
       Integer type = null;
       Integer start = 0;
@@ -180,15 +186,43 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
          System.out.println(ac0.getAccount() + " : " + ac0.getName());
       }
    }
-   
-   public  void testFindNameEmpty() {
+
+   public void testFindName() {
+      PascalCoinClient client = getClientLocal();
+      //search must be 3 characters at least for the 
+      String name = "pasc";
+
+      System.out.println("testFindName for " + name + ". Should return accounts with pasc string inside");
+
+      Boolean exact = false;
+      Integer type = null;
+      Integer start = 0;
+      Integer max = 100;
+//      System.out.println("List<Account> findAccounts(String name, Integer type, Integer start, Integer max);");
+//      List<Account> list = client.findAccounts(name, type, start, max);
+//      for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+//         Account ac0 = (Account) iterator.next();
+//         System.out.println(ac0.getAccount() + " : " + ac0.getName());
+//      }
+
+      System.out.println("List<Account> findAccounts(String name, Boolean exact, Integer type, Boolean listed, Double minBalance, Double maxBalance, Integer start, Integer max);");
+      List<Account> list = client.findAccounts(name, exact, type, null, null, null, 0, 10000);
+      for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+         Account ac0 = (Account) iterator.next();
+         System.out.println(ac0.getAccount() + " : " + ac0.getName());
+      }
+   }
+
+   public void testFindNameEmpty() {
+      System.out.println("testFindNameEmpty. Should only return accounts without a name");
+
       PascalCoinClient client = getClientLocal();
       //search must be 3 characters at least for the 
       String name = "";
       Boolean exact = true;
       Integer type = null;
       Integer start = 0;
-      Integer max = 10;
+      Integer max = 50;
       System.out.println("List<Account> findAccounts(String name, Integer type, Integer start, Integer max);");
       List<Account> list = client.findAccounts(name, type, start, max);
       for (Iterator iterator = list.iterator(); iterator.hasNext();) {
@@ -197,23 +231,24 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
 
       System.out.println("List<Account> findAccounts(String name, Boolean exact, Integer type, Boolean listed, Double minBalance, Double maxBalance, Integer start, Integer max);");
-      list = client.findAccounts(name, exact, type, null, null, null, 0, 50);
+      list = client.findAccounts(name, exact, type, null, null, null, 0, max);
       for (Iterator iterator = list.iterator(); iterator.hasNext();) {
          Account ac0 = (Account) iterator.next();
          System.out.println(ac0.getAccount() + " : " + ac0.getName());
       }
    }
 
-   public  void testGet() {
-      //uses the default 
+   public void testGet() {
+      //uses the default
+      String pwd = "";
       PascalCoinClient client = new PascalCoinClientImpl("192.168.0.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
-      client.unlock("angband9");
+      client.unlock(pwd);
       Integer accountValue = new Integer(676300);
       Account account = client.getAccount(accountValue);
       System.out.println("Account's balance: PASC=" + account.getBalance());
    }
 
-   public  void testGetAccount() {
+   public void testGetAccount() {
       PascalCoinClient client = getClient();
       Account ac0 = client.getAccount(0);
       System.out.println(ac0.getAccount() + " : " + ac0.getBalance());
@@ -223,7 +258,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    }
 
-   public  void testGetAccount(int account) {
+   public void testGetAccount(int account) {
       PascalCoinClient client = getClientLocal();
       Account ac0 = client.getAccount(account);
       System.out.println(ac0.getAccount() + " : " + ac0.getBalance());
@@ -234,7 +269,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    }
 
-   public  void testGetAllAccounts() {
+   public void testGetAllAccounts() {
       PascalCoinClient client = getClientLocal();
 
       long time = System.currentTimeMillis();
@@ -282,7 +317,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
    }
 
-   public  void testGetWalletAccount5() {
+   public void testGetWalletAccount5() {
       PascalCoinClient client = getClientLocal();
       String encPubKey = null; //optional
       String b58PubKey = "JJj2GZDmBCwbQuFLumucGMqWALmqpNxuYDEpPYi6aq4y4gvdFv1JLJYGgQyt5oUa1sgyUoAK8m7adARBa9JfGuKRtJQsiegEWQ41WcsyQAZ9iUcnFRVgKe89mqmbuU8hPF7ewisP49HdJCpfHxiwiz95JGWoBP3XdSf4TvBQShjFeVuMEB6pXCMQCfcnG1uBi"; //optional
@@ -300,7 +335,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
    }
 
-   public  void testGetWalletAccountOwned() {
+   public void testGetWalletAccountOwned() {
       PascalCoinClient client = getClientLocal();
 
       client.getPendings();
@@ -322,7 +357,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
    }
 
-   public  void testGetWalletAccounts_0_100() {
+   public void testGetWalletAccounts_0_100() {
       PascalCoinClient client = getClient();
       String encPubKey = null; //optional
       String b58PubKey = null; //optional
@@ -343,7 +378,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
    }
 
-   public  void testGetWalletPubKey() {
+   public void testGetWalletPubKey() {
 
       PascalCoinClient client = getClient();
       Integer start = 0;
@@ -365,7 +400,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
 
    }
 
-   public  void testLast100Blocks() {
+   public void testLast100Blocks() {
 
       PascalCoinClient client = getClientLocal();
 
@@ -376,7 +411,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       }
    }
 
-   public  void testRichList() {
+   public void testRichList() {
       PascalCoinClient client = getClientLocal();
 
       String name = null;
