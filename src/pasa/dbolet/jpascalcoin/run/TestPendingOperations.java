@@ -18,10 +18,10 @@ public class TestPendingOperations extends TestManualClientAbstract {
 
       TestPendingOperations c = new TestPendingOperations();
 
-      c.getBlocksInThePast();
+      c.testPendings();
    }
 
-   private void getBlocksInThePast() {
+   private void testPendings() {
 
       PascalCoinClient client = getClientLocal();
 
