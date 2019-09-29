@@ -10,10 +10,10 @@ import java.io.IOException;
  */
 public class RPCIOException extends RuntimeException {
 
-   
    private IOException ioe;
 
    public RPCIOException(IOException ioe) {
+      super(ioe);
       this.ioe = ioe;
       
    }
