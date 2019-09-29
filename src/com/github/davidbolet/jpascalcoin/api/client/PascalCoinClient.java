@@ -141,7 +141,8 @@ public interface PascalCoinClient {
 			 * @return Returns an array holding pending operations in "Operation Object" format */
 			List<Operation> getPendings();
 			
-			
+			List<Operation> getPendings(Integer start, Integer max);
+            
 			/**
 			 * Return an Integer with item count of operations pending to be included at the Blockchain.
 			 * @return Returns an Integer with number of pending operations*/

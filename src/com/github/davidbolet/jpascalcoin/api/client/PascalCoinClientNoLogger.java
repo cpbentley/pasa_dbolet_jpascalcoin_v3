@@ -544,6 +544,30 @@ public class PascalCoinClientNoLogger implements PascalCoinClient {
    }
 
    @Override
+   public List<Operation> getPendings(Integer start, Integer max) {
+      List<Operation> result = null;
+      Map<String, Object> body = getRPCBody();
+      Map<String, Object> params = new HashMap<>();
+      body.put("method", "getpendings");
+      if (start == null || max == null)
+         throw new IllegalArgumentException("start and max are mandatory arguments");
+      params.put("start", start);
+      params.put("max", max);
+      body.put("params", params);
+      Call<OpResult<List<Operation>>> blockOperationCall = pascalCoinService.getPendings(body);
+      try {
+         Response<OpResult<List<Operation>>> response = blockOperationCall.execute();
+         if (response.body().isError()) {
+            throw response.body().getError();
+         }
+         result = response.body().getResult();
+      } catch (IOException e) {
+         throw new RPCIOException(e);
+      }
+      return result;
+   }
+      
+   @Override
    public Integer getPendingsCount() {
       Integer result = 0;
       Map<String, Object> body = getRPCBody();
