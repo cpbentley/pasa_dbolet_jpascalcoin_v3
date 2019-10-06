@@ -1,3 +1,9 @@
+# Building from Pure Sources
+
+Because JPascalCoin uses Retrofit, it has some Android depedencies
+
+* Becu
+
 # JPascalCoin
 
 JPascalCoin is a Java library for PascalCoin. Currently only the JSON-RPC API is supported.
