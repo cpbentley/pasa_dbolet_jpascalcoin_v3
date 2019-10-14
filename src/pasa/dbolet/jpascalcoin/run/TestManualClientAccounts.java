@@ -29,7 +29,7 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       TestManualClientAccounts c = new TestManualClientAccounts();
 
       //by default is mainnet. set to true to test testnet
-      boolean isTestNet = false;
+      boolean isTestNet = true;
       if (isTestNet) {
          c.setPort(PascalCoinConstants.DEFAULT_TEST_RPC_PORT);
       }
@@ -45,13 +45,13 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       //c.testFindAccount();
       //c.testRichList();
 
-      //c.testAccountForSale();
+      c.testAccountForSale();
 
       //c.testBuyAccount();
       //c.testLast100Blocks();
 
-      c.testFindName();
-      c.testFindNameEmpty();
+      //c.testFindName();
+      //c.testFindNameEmpty();
 
       //c.testGetAccount(101181);
       //c.testGetWalletAccountOwned();
@@ -79,39 +79,10 @@ public class TestManualClientAccounts extends TestManualClientAbstract {
       System.out.println("Done in " + (diff / 1000) + " seconds");
    }
 
-   public void testBuyAccount() {
-      PascalCoinClient client = getClientLocal();
-
-      List<PublicKey> list = client.getWalletPubKeys(0, 50);
-      for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-         PublicKey publicKey = (PublicKey) iterator.next();
-         if (publicKey.getName().equals("Pascal Java Swing")) {
-            String newEncPubKey = publicKey.getEncPubKey();
-            String newB58PubKey = null; //only one is needed
-            Integer sellerAccount = 112800;
-            Double price = 0.1000;
-            Double amount = 0.1001;
-            Double fee = 0.0001;
-            Integer buyerAccount = 499200;
-            Integer accountToBuy = 483014;
-            byte[] payload = null;
-            PayLoadEncryptionMethod encryptMethod = PayLoadEncryptionMethod.NONE;
-            String pwd = null;
-            Operation op = client.buyAccount(buyerAccount, accountToBuy, price, sellerAccount, newB58PubKey, newEncPubKey, amount, fee, payload, encryptMethod, pwd);
-
-            if (op != null) {
-               System.out.println("Success:" + op.getTypeDescriptor());
-            } else {
-               System.out.println("Failure");
-            }
-         }
-      }
-
-   }
 
    public void testDonate() {
       PascalCoinClient client = new PascalCoinClientImpl("192.168.1.12", PascalCoinConstants.DEFAULT_MAINNET_RPC_PORT);
-      client.unlock("angband9");
+      client.unlock("password");
 
       Integer accountSender = new Integer(676300);
       Integer accountTarget = new Integer(381309);
