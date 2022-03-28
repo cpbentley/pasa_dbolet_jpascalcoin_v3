@@ -727,7 +727,8 @@ public class PascalCoinClientImpl implements PascalCoinClient {
          params.put("new_name", newName);
       if (new_type != null)
          params.put("new_type", new_type);
-      params.put("fee", fee);
+      if (fee != null)
+         params.put("fee", fee);
       if (payload != null)
          params.put("payload", Byte2HexHelper.byteToHex(payload));
       if (payloadMethod != null)
